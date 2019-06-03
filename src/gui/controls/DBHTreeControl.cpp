@@ -1138,21 +1138,25 @@ wxTreeItemId DBHTreeControl::getNextItem(wxTreeItemId current)
 {
     wxTreeItemId temp = current;
     wxTreeItemIdValue cookie;   // dummy - not really used
-    if (ItemHasChildren(temp))
-        temp = GetFirstChild(temp, cookie);
-    else
+    if (ItemHasChildren(current))
     {
-        while (true)
-        {
-            if (temp == GetRootItem()) // back to the root (start search from top)
-                break;
-            wxTreeItemId t = temp;
-            temp = GetNextSibling(t);
-            if (temp.IsOk())
-                break;
-            else
-                temp = GetItemParent(t);
-        }
+        temp = GetFirstChild(current, cookie);
+        if (temp.IsOk())
+            return temp;
+        else
+            temp = current;
+    }
+
+    while (true)
+    {
+        if (temp == GetRootItem()) // back to the root (start search from top)
+            break;
+        wxTreeItemId t = temp;
+        temp = GetNextSibling(t);
+        if (temp.IsOk())
+            break;
+        else
+            temp = GetItemParent(t);
     }
     return temp;
 }
@@ -1181,7 +1185,7 @@ bool DBHTreeControl::findText(const wxString& text, bool forward)
             temp = getNextItem(temp);
         else
             temp = getPreviousItem(temp);
-        if (temp == start)  // not found (we wrapped around completely)
+        if ((temp == start) || (!temp.IsOk()))  // not found (we wrapped around completely)
             return false;
     }
 }
