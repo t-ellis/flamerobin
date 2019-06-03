@@ -219,7 +219,7 @@ SingleStatement MultiStatement::getNextStatement()
             {
                 wxString::const_iterator p1 = terminatorM.begin();
                 wxString::const_iterator p2 = p;
-                while (p1 != terminatorM.end() && p2 != interesting.end())
+                while (terminatorM.end() != p1)
                 {
                     if (*p1 != *p2)
                         break;
