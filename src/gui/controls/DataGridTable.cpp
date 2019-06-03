@@ -472,6 +472,8 @@ void DataGridTable::initialFetch(bool readonly)
         wxGridTableMessage msg(this, wxGRIDTABLE_NOTIFY_COLS_APPENDED,
             rowsM.getRowFieldCount());
         GetView()->ProcessTableMessage(msg);
+        if (rowsM.getRowCount() == 0)
+            GetView()->SetGridCursor(wxGridNoCellCoords);
     }
 
     if (statementM->Type() == IBPP::stExecProcedure)
